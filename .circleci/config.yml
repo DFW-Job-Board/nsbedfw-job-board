@@ -1,0 +1,57 @@
+version: 2
+jobs:  
+  build:    
+    docker:      
+      - image: node:11    
+    steps:      
+      - checkout
+
+      - restore_cache: # special step to restore the dependency cache          
+          key: dependency-cache-{{ checksum "package.json" }}      
+      
+      - run:          
+          name: Setup Dependencies          
+          command: npm install          
+      
+      - save_cache: # special step to save the dependency cache          
+          key: dependency-cache-{{ checksum "package.json" }}          
+          paths:            
+            - ./node_modules
+
+## Possible CircleCi 2.1 config
+# version: 2.1
+# orbs:
+#   heroku: circleci/heroku@0.0.10
+#   workflows:
+#     heroku_deploy:
+#       jobs:
+#         - build
+#         - heroku/deploy-via-git: # Use the pre-configured job, deploy-via-git
+#             requires:
+#               - build
+#             filters:
+#               branches:
+#                 only: circleci-project-setup
+
+# jobs:  
+#   build:    
+#     docker:      
+#       - image: node:11    
+#     steps:      
+#       - checkout
+
+#       - restore_cache: # special step to restore the dependency cache          
+#           key: dependency-cache-{{ checksum "package.json" }}      
+      
+#       - run:          
+#           name: Setup Dependencies          
+#           command: npm install          
+      
+#       - save_cache: # special step to save the dependency cache          
+#           key: dependency-cache-{{ checksum "package.json" }}          
+#           paths:            
+#             - ./node_modules
+      
+#       # - run:
+#       #     name: Build npm
+#       #     command: npm run build
