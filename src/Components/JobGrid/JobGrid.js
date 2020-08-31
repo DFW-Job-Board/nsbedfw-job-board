@@ -10,8 +10,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
-import { content } from '../../utility/emailContent';
-import AddToBoard from '../AddToBoard/AddToBoard';
+import AddToJobBoard from '../AddToJobBoard/AddToJobBoard';
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -38,6 +37,7 @@ const useStyles = makeStyles(theme => ({
 const JobGrid = () => {
   const classes = useStyles();
   const [jobPosts, setJobPosts] = useState([]);
+  const [addToJobBoardOpen, setAddToJobBoard] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -48,10 +48,22 @@ const JobGrid = () => {
     fetchData();
   }, []);
 
+  const openAddToJobBoard =() => {
+    setAddToJobBoard(true);
+  }
+
+  const closeAddToJobBoard = () =>{
+    setAddToJobBoard(false);
+  }
+
   return (
     <div>
       <Container className={classes.cardGrid} maxWidth='md'>
         <Hero header={false}></Hero>
+        <Button className={classes.button} variant='outlined' color='primary' onClick={openAddToJobBoard}>
+          add job to board
+        </Button>
+        <AddToJobBoard open={addToJobBoardOpen} onClose={closeAddToJobBoard}></AddToJobBoard>
         <Grid container spacing={4}>
           {jobPosts &&
             jobPosts.map(post => (
